@@ -32,7 +32,7 @@ public class Client
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); //B.R. che legge i valori mandati in chat (client)
 		PrintWriter out = new PrintWriter(sock.getOutputStream(), true); //P.W. che manda i valori scritti dal client al socket, "true" per ripulire il b.r. dopo il passaggio dei dati
 
-		String NomeUtent = nome(thcl); //Richiamo il metodo nome() passandogli come valore il valore del thread, il return del metodo lo assegno alla variabile NomeUtent
+		String NomeUtent = nome(); //Richiamo il metodo nome() passandogli come valore il valore del thread, il return del metodo lo assegno alla variabile NomeUtent
 
 		while(true) //Loop
 		{
@@ -51,11 +51,10 @@ public class Client
 
 	/**
 	 * Metodo che ha la funzione di assegnare il nome al client appena collegato
-	 * @param thread 
 	 * @return ritorna il valore del nome scelto dall'utente
 	 * @throws IOException
 	 */
-	public static String nome(ClientTH thread) throws IOException //Metodo di assegnazione nome utente
+	public static String nome() throws IOException //Metodo di assegnazione nome utente
 	{ 
 		System.out.println("Inserisci il tuo nome: "); //Messaggio client
 		BufferedReader inputnome = new BufferedReader(new InputStreamReader(System.in)); //Inizializzo il b.r. che si occuperà di prendere il nome messo in input dall'utente
