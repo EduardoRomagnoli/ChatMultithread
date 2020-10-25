@@ -7,8 +7,23 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/**
+ * La classe Client si occupa di gestire:
+ * La connessione al server;
+ * L'apertura dei thread del client, classe "ClientTH", questi servono per gestire più di un client per volta;
+ * La gestione del comando "esci" che serve per far disconnettere il client dal server (chiude il server socket).
+ * @author Eduardo Romagnoli
+ * 
+ */
+
 public class Client 
 {
+	/**
+	 * Metodo main della classe "Client" si occupa di inizializzare i vari client e di lanciare i thread
+	 * @param argas
+	 * @throws UnknownHostException
+	 * @throws IOException
+	 */
 	public static void main(String[] argas) throws UnknownHostException, IOException 
 	{
 		Socket sock = new Socket("localhost", 3333); //Connessione al Socket
@@ -16,9 +31,9 @@ public class Client
 		(new Thread(thcl)).start(); //Apertura Thread client
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); //B.R. che legge i valori mandati in chat (client)
 		PrintWriter out = new PrintWriter(sock.getOutputStream(), true); //P.W. che manda i valori scritti dal client al socket, "true" per ripulire il b.r. dopo il passaggio dei dati
-		
+
 		String NomeUtent = nome(thcl); //Richiamo il metodo nome() passandogli come valore il valore del thread, il return del metodo lo assegno alla variabile NomeUtent
-		
+
 		while(true) //Loop
 		{
 			System.out.println(NomeUtent + "> "); //Messaggi mandati dall'Utente
@@ -33,7 +48,13 @@ public class Client
 		sock.close(); //chiudo il socket (*1)
 		System.exit(0); //chiudo l'app client (*1)
 	}
-	
+
+	/**
+	 * Metodo che ha la funzione di assegnare il nome al client appena collegato
+	 * @param thread 
+	 * @return ritorna il valore del nome scelto dall'utente
+	 * @throws IOException
+	 */
 	public static String nome(ClientTH thread) throws IOException //Metodo di assegnazione nome utente
 	{ 
 		System.out.println("Inserisci il tuo nome: "); //Messaggio client

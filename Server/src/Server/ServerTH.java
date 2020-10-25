@@ -7,6 +7,14 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * Classe ServerTH, si occupa di:
+ * Gestire i Thread lanciati della classe Server;
+ * Gestire la chiusura di una comunicazione da parte di un client, con relativo messaggio di disconnessione che viene inoltrat a tutti gli altri clients;
+ * Gestire l'inoltro dei messaggi tra i clients.
+ * @author Eduardo Romagnoli
+ *
+ */
 public class ServerTH implements Runnable
 {
 	private Socket client; //Dichiaro la variabile d'appoggio per il valore del Socket
@@ -14,6 +22,12 @@ public class ServerTH implements Runnable
 	private PrintWriter out; //P.R. per i valori in output
 	private ArrayList<ServerTH> clients; //ArrayList con tutti i client
 	
+	/**
+	 * Metodo costruttore, si occupa di inizializzare i valori per la classe ServerTH
+	 * @param clientsock
+	 * @param clients
+	 * @throws IOException
+	 */
 	public ServerTH(Socket clientsock, ArrayList<ServerTH> clients) throws IOException
 	{
 		this.client = clientsock; //inizializzo la variabile client con il valore passato dalla classe server
@@ -22,6 +36,9 @@ public class ServerTH implements Runnable
 		out = new PrintWriter(client.getOutputStream(), true); //Inizializzo P.R. e passo i valori a client, "true": in modo che "pulisca" il buffer dopo ogni output
 	}
 	
+	/**
+	 * Metodo "run", si occupa di gestire i thread e chiamare i metodi di invio dei messaggi e di chiusura della counicazione da parte di un client
+	 */
 	@Override
 	public void run() //Run
 	{
@@ -62,6 +79,10 @@ public class ServerTH implements Runnable
 		}
 	}
 	
+	/**
+	 * Metodo "messaggioOut" si occupa di inoltrare i messaggi agli utenti
+	 * @param messaggio
+	 */
 	private void messaggioOut(String messaggio) //Metodo che serve a inviare il messaggio a tutti i client
 	{
 		for(ServerTH aTutti : clients) //For:each -> scorre i valori dell'ArrayList (necessario in questo caso per alleggerire il codice)
@@ -71,6 +92,10 @@ public class ServerTH implements Runnable
 		}
 	}
 	
+	/**
+	 * Metodo "chiudiComunicazione", si occupa di mandare il messaggio relativo ai client online quando un client si disconnette
+	 * si occupa di cancellare il valore del client nell'ArrayList
+	 */
 	public void chiudiComunicazione() //Metodo che serve per chiudere mandare i relativi messaggi di client scollegati e rimuovere i dati dall'ArrayList
 	{
 		int i = 0; //Dichiarazione valore int (per iterazione)

@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"Client","c":"Client","l":"Client()","url":"%3Cinit%3E()"},{"p":"Client","c":"ClientTH","l":"ClientTH(Socket)","url":"%3Cinit%3E(java.net.Socket)"},{"p":"Client","c":"Client","l":"main(String[])","url":"main(java.lang.String[])"},{"p":"Client","c":"Client","l":"nome(ClientTH)","url":"nome(Client.ClientTH)"},{"p":"Client","c":"ClientTH","l":"run()"}]

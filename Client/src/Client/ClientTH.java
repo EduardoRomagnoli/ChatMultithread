@@ -5,17 +5,32 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+/**
+ * Classe ClientTH, si occupa di:
+ * Gestire i thread dei clients;
+ * Gestire i messaggi in output dai clients.
+ * @author Eduardo Romagnoli
+ *
+ */
 public class ClientTH implements Runnable
 {
 	private Socket server; //Creo la variabile socket server
 	private BufferedReader in; //Creo il b.r. in
-	
+
+	/**
+	 * Costruttore della class ClientTH, si occupa di inizializzare i valori: "s" è il socket che viene passato dalla classe client appena si collega con il server 
+	 * @param s
+	 * @throws IOException
+	 */
 	public ClientTH(Socket s) throws IOException //Costruttore: passo il valore del socket dalla classe "Client"
 	{
 		server = s; //Inizializzo la variabile socket con la variabile d'appoggio s
 		in = new BufferedReader(new InputStreamReader(server.getInputStream())); //Inizializzo il b.r. dicendo che deve prendere i messaggi dal socket di riferimento
 	}
-	
+
+	/**
+	 * Metodo che si occupa di runnare i threads
+	 */
 	@Override
 	public void run() //Run
 	{
