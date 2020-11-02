@@ -50,21 +50,22 @@ public class ServerTH implements Runnable
 				System.out.println("3 - Preparazione Invio messaggio"); //Messaggio
 				try //Provo:
 				{
-					int SpazioPerInvioMessaggio = inputDalServer.indexOf(""); //Controlla i caratteri in valori
+					int SpazioPerInvioMessaggio = inputDalServer.indexOf(""); //Controllo dell'index
 					messaggioOut(inputDalServer.substring(SpazioPerInvioMessaggio)); //manda il messaggio in input e la sottostringa composta dal valore al metodo "messaggioOut"
 				}
 				catch (Exception e) //Eccezione lanciata nel caso un client si sia disconnesso (Continua...)
 				{
+					System.out.println("prova");
 					break; //Esce dal loop (Continua...)
 				}
 			}
 			chiudiComunicazione(); //chiama il metodo chiuduComunicazione() (fine)
 		}
-		catch (IOException e) //Eccezione lanciata nel caso i valori reiterati nel loop presentino degli errori
+		catch (IOException e) //Eccezione lanciata per verificare i client disconnessi senza comando esci
 		{
 			System.out.println(e.getMessage()); 
-			System.out.println("Errore Thread - errorre riconoscimento messaggio"); //Messaggio eccezione
-			System.exit(1); //Chiude il programma
+			System.out.println("Errore Thread - un client si è disconnesso"); //Messaggio eccezione
+			chiudiComunicazione(); //chiama il metodo chiudiComunicazione() per rimuovere il valore dall'array e per chiudere la comunicazione
 		}
 		try 
 		{
@@ -98,14 +99,15 @@ public class ServerTH implements Runnable
 	 */
 	public void chiudiComunicazione() //Metodo che serve per chiudere mandare i relativi messaggi di client scollegati e rimuovere i dati dall'ArrayList
 	{
-		int i = 0; //Dichiarazione valore int (per iterazione)
+		String messaggioerrore = "SERVER - un client si è disconnesso, i messaggi che invierà saranno inoltrati solo ai client connessi"; //Inizializzazione messaggio per client
+		int i = 0; //Dichiarazione valore int (per iterazione)1
 		System.out.println("5 - Client disconnesso"); //Messaggio per console server 
 		for(ServerTH errore_per_tutti : clients) //For:each -> scorre i valori dell'ArrayList (necessario in questo caso per alleggerire il codice)
 		{
-			errore_per_tutti.out.println("SERVER - Il secondo client si è disconnesso, i messaggi che invierà non saranno inoltrati"); //Messaggio per i client
+			errore_per_tutti.out.println(messaggioerrore); //Messaggio per i client
 			i++; //Incremento valore per prendere nota del valore dell'ArrayList
-			clients.remove(i); //Rimuove il valore nella posizione data
-			System.out.println("6 - Cancellato valore nell'arraylist"); //Messaggio per console server 
 		}
+		clients.remove(i); //Rimuove il valore nella posizione data
+		System.out.println("6 - Cancellato valore nell'arraylist"); //Messaggio per console server 
 	}
 }
