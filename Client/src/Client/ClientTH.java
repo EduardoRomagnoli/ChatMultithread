@@ -1,5 +1,11 @@
 package Client;
 
+import java.awt.AWTException;
+import java.awt.Image;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
+import java.awt.TrayIcon.MessageType;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -32,18 +38,21 @@ public class ClientTH implements Runnable
 	 * Metodo che si occupa di runnare i threads
 	 */
 	@Override
-	public void run() //Run
+	public void run() //Metodo Run
 	{
+		TrayIcon Tray = Lanciatrayicon();
 		try 
 		{
 			while(true) //Loop
 			{
-				String outputDalServer = in.readLine(); //Prendo i valori mandati in output dal server e li salvo nella variabile "outputDalServer"
+				String outputDalServer = ""; // inizializzazione variabile input
+				outputDalServer = in.readLine(); //Prendo i valori mandati in output dal server e li salvo nella variabile "outputDalServer"
 				if(outputDalServer == null) //Controllo se il valore è nullo serve per la chiusura della connessione (controllare classe Client), in questo caso:
 				{
 					break; //esco dal loop(1*)
 				}
-				System.out.println("> " + outputDalServer); //Messaggio client che ritorna il valore inviato dal server
+				System.out.println("< " + outputDalServer); //Messaggio client che ritorna il valore inviato dal server
+				WindowsNOTF(outputDalServer, Tray);
 			}
 		}
 		catch (IOException e) //Eccezione lanciata nel caso che ci siano errori nella parte di codice del loop (controllare testo del messaggio per più info)
@@ -59,5 +68,47 @@ public class ClientTH implements Runnable
 			System.out.println(e.getMessage()); 
 			System.out.println("Errore durante la chiusura della comunicazione con il server."); //Messaggio per client
 		}
+	}
+	
+	/**
+	 * Metodo per il controllo del sistema operativo, per verificare se è possibile utilizzare i messaggi di errore windows 10
+	 * @param message
+	 * @param trayIcon
+	 */
+	private void WindowsNOTF(String message, TrayIcon trayIcon)
+	{
+		if ("Windows 10".equals(System.getProperty("os.name")))
+		{
+			trayIcon.displayMessage("FAST CHAT", message, MessageType.INFO);
+		}
+	}
+	
+	/**
+	 * Metodo per lanciare il sistema delle notifiche ai clients
+	 * @return
+	 */
+	private TrayIcon Lanciatrayicon()
+	{
+		if (!"Windows 10".equals(System.getProperty("os.name")))
+		{
+			System.out.println("SERVER - Sistema per l'invio dei messaggi al client non supportato dal tuo S.O. " + System.getProperty("os.name"));
+		}
+		else 
+		{
+			SystemTray tray = SystemTray.getSystemTray();
+			Image image = Toolkit.getDefaultToolkit().createImage("./img/logo.png");//DA MODIFICARE
+		    TrayIcon trayIcon = new TrayIcon(image, "FAST CHAT");
+		    trayIcon.setImageAutoSize(true);
+		    trayIcon.setToolTip("FAST CHAT");
+		    try 
+		    {
+				tray.add(trayIcon);
+			} catch (AWTException e) 
+		    {
+				System.out.println("SERVER - Non ti arriveranno alcune notifiche");
+			}
+		    return trayIcon;	
+		}
+		return null;
 	}
 }

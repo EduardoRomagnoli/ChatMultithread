@@ -31,17 +31,19 @@ public class Client
 		(new Thread(thcl)).start(); //Apertura Thread client
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); //B.R. che legge i valori mandati in chat (client)
 		PrintWriter out = new PrintWriter(sock.getOutputStream(), true); //P.W. che manda i valori scritti dal client al socket, "true" per ripulire il b.r. dopo il passaggio dei dati
-
-		String NomeUtent = nome(); //Richiamo il metodo nome() passandogli come valore il valore del thread, il return del metodo lo assegno alla variabile NomeUtent
-
+		System.out.println(" - SERVER INFO - \n 1 - usa '@nomeutente' per inviare un messaggio privato\n 2 - usa <<esci>> per disconnettersi\n");
 		while(true) //Loop
 		{
-			System.out.println(NomeUtent + "> "); //Messaggi mandati dall'Utente
+			System.out.println("> "); //Messaggi mandati dall'Utente
 			String comandi = br.readLine(); //Leggo il messaggio tramite il b.r. e assegno il valore ricavato in comandi
 			if(comandi.equals("esci")) //Controllo se il client ha scritto "esci", in questo caso (continua...)
 			{
 				System.out.println("Chiusura programma..."); //Messaggio al client
 				break; //Esco dal loop (*1)
+			}
+			if (comandi.startsWith("@"))
+			{
+				System.out.println("SERVER - Scrivi il messaggio privato da inviare a: " + comandi.substring(1));
 			}
 			out.println(comandi); //Mando al server il messaggio "comandi"
 		}
@@ -51,14 +53,10 @@ public class Client
 
 	/**
 	 * Metodo che ha la funzione di assegnare il nome al client appena collegato
-	 * @return ritorna il valore del nome scelto dall'utente
 	 * @throws IOException
 	 */
-	public static String nome() throws IOException //Metodo di assegnazione nome utente
-	{ 
-		System.out.println("Inserisci il tuo nome: "); //Messaggio client
-		BufferedReader inputnome = new BufferedReader(new InputStreamReader(System.in)); //Inizializzo il b.r. che si occuperà di prendere il nome messo in input dall'utente
-		String NomeUtente = inputnome.readLine(); //Assegno il valore ad una stringa
-		return NomeUtente; //ritrorno il valore preso
+	public static String getNome() throws Exception
+	{
+		return null;
 	}
 }
