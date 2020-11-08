@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 public class Server 
 {
 	private static final int porta = 3333; //Dichiarazione della variabile porta (porta del socket)
-	private static ArrayList<ServerTH> clients = new ArrayList<>(); //Dichiarazione dell'ArrayList
+	static ArrayList<ServerTH> clients1 = new ArrayList<>(); //Dichiarazione dell'ArrayList
 	private static ExecutorService pool = Executors.newFixedThreadPool(10); //Dichiarazione della Thread Pool, creo dei thread per poi essere lanciati
 	private static ServerSocket servsock; //Variabile che conterrà il ServerSocket
 	
@@ -37,8 +37,8 @@ public class Server
 		{
 			Socket client = servsock.accept(); //Accettata la connessione
 			System.out.println("2 - Connessione stabilita con" + client); //Lessaggio
-			ServerTH ths = new ServerTH(client, clients); //Creato Nuovo oggetto del Thread (Server)
-			clients.add(ths); //Aggiunto l'oggetto thread all'ArrayList
+			ServerTH ths = new ServerTH(client, clients1); //Creato Nuovo oggetto del Thread (Server)
+			clients1.add(ths); //Aggiunto l'oggetto thread all'ArrayList
 			pool.execute(ths); //Eseguito l'oggetto thread 
 		}
 	}

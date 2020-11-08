@@ -21,7 +21,8 @@ public class ServerTH implements Runnable
 	private BufferedReader in; //B.R. per i valori in input
 	private PrintWriter out; //P.R. per i valori in output
 	private ArrayList<ServerTH> clients; //ArrayList con tutti i client
-	
+	private String NomeUtente;
+
 	/**
 	 * Metodo costruttore, si occupa di inizializzare i valori per la classe ServerTH
 	 * @param clientsock
@@ -35,31 +36,34 @@ public class ServerTH implements Runnable
 		in = new BufferedReader(new InputStreamReader(client.getInputStream())); //Inizializzo il B.R. in modo che possa prendere i dati passati da client: variabile in
 		out = new PrintWriter(client.getOutputStream(), true); //Inizializzo P.R. e passo i valori a client, "true": in modo che "pulisca" il buffer dopo ogni output
 	}
-	
+
 	/**
 	 * Metodo "run", si occupa di gestire i thread e chiamare i metodi di invio dei messaggi e di chiusura della counicazione da parte di un client
 	 */
 	@Override
 	public void run() //Run
 	{
+		out.println(nameList());
+		setNome();
 		try
 		{
 			while(true) //Loop
 			{
-				String inputDalServer = in.readLine(); //Legge i messaggi in input al server e li salva nella variabile "inputDalServer"
-				System.out.println("3 - Preparazione Invio messaggio"); //Messaggio
-				try //Provo:
+				String input = "";
+				input = in.readLine(); int index = input.indexOf(""); // lettura input
+				if (input.startsWith("@"))
 				{
-					int SpazioPerInvioMessaggio = inputDalServer.indexOf(""); //Controllo dell'index
-					messaggioOut(inputDalServer.substring(SpazioPerInvioMessaggio)); //manda il messaggio in input e la sottostringa composta dal valore al metodo "messaggioOut"
+					String recipient = input.substring(1); int index2 = recipient.indexOf("");
+					input = "";
+					input = in.readLine(); index = input.indexOf(""); // lettura input
+					messaggioOut(input.substring(index), recipient.substring(index2));
 				}
-				catch (Exception e) //Eccezione lanciata nel caso un client si sia disconnesso (Continua...)
+				else 
 				{
-					System.out.println("prova");
-					break; //Esce dal loop (Continua...)
+					messaggioOut(input.substring(index)); // passa il messaggio al metodo output
 				}
+
 			}
-			chiudiComunicazione(); //chiama il metodo chiuduComunicazione() (fine)
 		}
 		catch (IOException e) //Eccezione lanciata per verificare i client disconnessi senza comando esci
 		{
@@ -79,7 +83,7 @@ public class ServerTH implements Runnable
 			System.exit(1); //Chiude il programma
 		}
 	}
-	
+
 	/**
 	 * Metodo "messaggioOut" si occupa di inoltrare i messaggi agli utenti
 	 * @param messaggio
@@ -92,22 +96,140 @@ public class ServerTH implements Runnable
 			aTutti.out.println(messaggio); //Invia i messaggi a tutti i client
 		}
 	}
-	
+
+	/**
+	 * Metodo che si occupa di inoltrare i messaggi one-to-one	
+	 * @param message
+	 * @param recipient
+	 */
+	private void messaggioOut(String message, String recipient)
+	{
+		String messagetime = "" + java.time.LocalTime.now();
+		messagetime = messagetime.substring(0, 5);
+		for(ServerTH Lista : clients)
+		{
+			if (recipient.equals(Lista.getNome()))
+			{
+				Lista.out.println(NomeUtente + "> "+ message + "\t"); // invio del messaggio
+			}
+		}
+		System.out.println("7 - Messaggio inviato da " + NomeUtente);
+	}
+
+	/**
+	 * Ritorna il valore del nome dell'utente
+	 * @return
+	 */
+	public String getNome()
+	{
+		return NomeUtente;
+	}
+
+	/**
+	 * Assegna nome utente
+	 */
+	private void setNome()
+	{
+		String clstring = null;
+		boolean controllo = false;
+		while (!(controllo))
+		{
+			controllo = true;
+			out.println("SERVER - Inserire nome utente:");
+			try 
+			{
+				clstring = in.readLine();
+				clstring = clstring.replace("\n", "").replace("\r", "");
+				if (clstring.equals(""))
+				{
+					out.println("8 - Utente non valido, per favore inserisci un nome diverso");
+					controllo = false;
+					continue;
+				}
+				for (ServerTH clientsNonArray : clients)
+				{
+					if (clstring.equals(clientsNonArray.getNome()))
+					{
+						out.println("9 - Nome già presente all'interno della chat");
+						controllo = false;
+						break;
+					}
+				}
+			}
+			catch (IOException e)
+			{
+				out.println("10 - Errore input");
+			}
+		}
+		this.NomeUtente = clstring;
+		AggiornaSessione();
+		out.println("11 - Nome utente impostato");
+		for(ServerTH clientsNonArray : clients)
+		{
+			clientsNonArray.out.println("SERVER -" + NomeUtente + " è online"); 
+		}
+	}
+
+	/**
+	 * Metodo di gestione della lista della persone connesse al server
+	 * @return
+	 */
+	public String nameList()
+	{
+		String listaNomiUtenti = "";
+		for(ServerTH ClientNotArray : clients)
+		{
+			listaNomiUtenti = listaNomiUtenti + ClientNotArray.getNome() + ", ";
+		}
+		String tmpstring = listaNomiUtenti.replace(", ", "").replace("null", "");
+		if (tmpstring.length()<1)
+		{
+			listaNomiUtenti = "SERVER - Sembra che oltre a te non ci sia più nessuno connesso in chat";
+		}
+		else 
+		{
+			listaNomiUtenti = listaNomiUtenti.replace("null, ", "");
+			listaNomiUtenti = listaNomiUtenti.substring(0, listaNomiUtenti.length() - 2);
+			listaNomiUtenti = "SERVER - Online:\n" + listaNomiUtenti;
+		}
+		return listaNomiUtenti;
+	}
+
 	/**
 	 * Metodo "chiudiComunicazione", si occupa di mandare il messaggio relativo ai client online quando un client si disconnette
 	 * si occupa di cancellare il valore del client nell'ArrayList
 	 */
-	public void chiudiComunicazione() //Metodo che serve per chiudere mandare i relativi messaggi di client scollegati e rimuovere i dati dall'ArrayList
+	public void chiudiComunicazione()
 	{
-		String messaggioerrore = "SERVER - un client si è disconnesso, i messaggi che invierà saranno inoltrati solo ai client connessi"; //Inizializzazione messaggio per client
-		int i = 0; //Dichiarazione valore int (per iterazione)1
-		System.out.println("5 - Client disconnesso"); //Messaggio per console server 
-		for(ServerTH errore_per_tutti : clients) //For:each -> scorre i valori dell'ArrayList (necessario in questo caso per alleggerire il codice)
+		System.out.println("12" + NomeUtente + " si è disconnesso dalla chat");
+		clients.remove(this);
+		for(ServerTH NonArray : clients)
 		{
-			errore_per_tutti.out.println(messaggioerrore); //Messaggio per i client
-			i++; //Incremento valore per prendere nota del valore dell'ArrayList
+			NonArray.out.println(NomeUtente + " si è disconnesso dalla chat"); 
 		}
-		clients.remove(i); //Rimuove il valore nella posizione data
-		System.out.println("6 - Cancellato valore nell'arraylist"); //Messaggio per console server 
+		AggiornaSessione();
+		out.println(nameList());
 	}
+
+	/**
+	 * Metodo che si occupa di far inviare dai client gli aggiornamenti della sessione attiva
+	 */
+	public void AggiornaSessione()
+	{
+		for(ServerTH NonArray : clients) 
+		{
+			System.out.println("13 - Aggiornamento sessione di chat corrente");
+			NonArray.Refresh();
+		}
+	}
+
+	/**
+	 * Aggiorna la sessione attiva
+	 */
+	public void Refresh()
+	{
+		clients = Server.clients1;
+	}
+
 }
+
