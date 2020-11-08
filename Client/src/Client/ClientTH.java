@@ -75,7 +75,7 @@ public class ClientTH implements Runnable
 	 * @param message
 	 * @param trayIcon
 	 */
-	private void WindowsNOTF(String message, TrayIcon trayIcon)
+	static void WindowsNOTF(String message, TrayIcon trayIcon)
 	{
 		if ("Windows 10".equals(System.getProperty("os.name")))
 		{
@@ -87,7 +87,7 @@ public class ClientTH implements Runnable
 	 * Metodo per lanciare il sistema delle notifiche ai clients
 	 * @return
 	 */
-	private TrayIcon Lanciatrayicon()
+	static TrayIcon Lanciatrayicon()
 	{
 		if (!"Windows 10".equals(System.getProperty("os.name")))
 		{
@@ -96,7 +96,7 @@ public class ClientTH implements Runnable
 		else 
 		{
 			SystemTray tray = SystemTray.getSystemTray();
-			Image image = Toolkit.getDefaultToolkit().createImage("./img/logo.png");//DA MODIFICARE
+			Image image = Toolkit.getDefaultToolkit().createImage("./img/immagine.png");
 		    TrayIcon trayIcon = new TrayIcon(image, "FAST CHAT");
 		    trayIcon.setImageAutoSize(true);
 		    trayIcon.setToolTip("FAST CHAT");

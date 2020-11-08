@@ -50,17 +50,17 @@ public class ServerTH implements Runnable
 			while(true) //Loop
 			{
 				String input = "";
-				input = in.readLine(); int index = input.indexOf(""); // lettura input
+				input = in.readLine(); int index = input.indexOf(""); 
 				if (input.startsWith("@"))
 				{
 					String recipient = input.substring(1); int index2 = recipient.indexOf("");
 					input = "";
-					input = in.readLine(); index = input.indexOf(""); // lettura input
+					input = in.readLine(); index = input.indexOf(""); 
 					messaggioOut(input.substring(index), recipient.substring(index2));
 				}
 				else 
 				{
-					messaggioOut(input.substring(index)); // passa il messaggio al metodo output
+					messaggioOut(input.substring(index)); 
 				}
 
 			}
