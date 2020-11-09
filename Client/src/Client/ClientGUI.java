@@ -100,7 +100,6 @@ public class ClientGUI extends JFrame
 		client = new JLabel(clients);
 		JScrollPane textPane = new JScrollPane(comandi, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		insmesstx.setToolTipText(" - SERVER INFO -\n 1 - usa '@nomeutente' per inviare un messaggio privato\n 2 - usa <<esci>> per disconnettersi\n");
-		textPane.setBackground(Color.RED);
 		Pannello.add(insmesstx, BorderLayout.SOUTH);
 		Pannello.add(textPane);
 		Pannello.add(client, BorderLayout.NORTH);
