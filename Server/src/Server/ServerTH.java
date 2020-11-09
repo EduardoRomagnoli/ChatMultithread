@@ -99,18 +99,18 @@ public class ServerTH implements Runnable
 
 	/**
 	 * Metodo che si occupa di inoltrare i messaggi one-to-one	
-	 * @param message
-	 * @param recipient
+	 * @param msg
+	 * @param str
 	 */
-	private void messaggioOut(String message, String recipient)
+	private void messaggioOut(String msg, String str)
 	{
 		String messagetime = "" + java.time.LocalTime.now();
 		messagetime = messagetime.substring(0, 5);
 		for(ServerTH Lista : clients)
 		{
-			if (recipient.equals(Lista.getNome()))
+			if (str.equals(Lista.getNome()))
 			{
-				Lista.out.println(NomeUtente + "> "+ message + "\t"); // invio del messaggio
+				Lista.out.println(NomeUtente + "> "+ msg + "\t"); // invio del messaggio
 			}
 		}
 		System.out.println("7 - Messaggio inviato da " + NomeUtente);
@@ -181,16 +181,16 @@ public class ServerTH implements Runnable
 		{
 			listaNomiUtenti = listaNomiUtenti + ClientNotArray.getNome() + ", ";
 		}
-		String tmpstring = listaNomiUtenti.replace(", ", "").replace("null", "");
-		if (tmpstring.length()<1)
+		String str = listaNomiUtenti.replace(", ", "").replace("null", "");
+		if (str.length()<1)
 		{
-			listaNomiUtenti = "SERVER - Sembra che oltre a te non ci sia più nessuno connesso in chat";
+			listaNomiUtenti = "SERVER - 0 utenti online";
 		}
 		else 
 		{
 			listaNomiUtenti = listaNomiUtenti.replace("null, ", "");
 			listaNomiUtenti = listaNomiUtenti.substring(0, listaNomiUtenti.length() - 2);
-			listaNomiUtenti = "SERVER - Online:\n" + listaNomiUtenti;
+			listaNomiUtenti = "SERVER - Online: " + listaNomiUtenti;
 		}
 		return listaNomiUtenti;
 	}
@@ -201,11 +201,11 @@ public class ServerTH implements Runnable
 	 */
 	public void chiudiComunicazione()
 	{
-		System.out.println("12" + NomeUtente + " si è disconnesso dalla chat");
+		System.out.println("12 - " + NomeUtente + " si e' disconnesso dalla chat");
 		clients.remove(this);
 		for(ServerTH NonArray : clients)
 		{
-			NonArray.out.println(NomeUtente + " si è disconnesso dalla chat"); 
+			NonArray.out.println(NomeUtente + " si e' disconnesso dalla chat"); 
 		}
 		AggiornaSessione();
 		out.println(nameList());

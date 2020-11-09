@@ -40,7 +40,6 @@ public class ClientTH implements Runnable
 	@Override
 	public void run() //Metodo Run
 	{
-		TrayIcon Tray = Lanciatrayicon();
 		try 
 		{
 			while(true) //Loop
@@ -52,7 +51,6 @@ public class ClientTH implements Runnable
 					break; //esco dal loop(1*)
 				}
 				System.out.println("< " + outputDalServer); //Messaggio client che ritorna il valore inviato dal server
-				WindowsNOTF(outputDalServer, Tray);
 			}
 		}
 		catch (IOException e) //Eccezione lanciata nel caso che ci siano errori nella parte di codice del loop (controllare testo del messaggio per più info)
@@ -68,47 +66,5 @@ public class ClientTH implements Runnable
 			System.out.println(e.getMessage()); 
 			System.out.println("Errore durante la chiusura della comunicazione con il server."); //Messaggio per client
 		}
-	}
-	
-	/**
-	 * Metodo per il controllo del sistema operativo, per verificare se è possibile utilizzare i messaggi di errore windows 10
-	 * @param message
-	 * @param trayIcon
-	 */
-	static void WindowsNOTF(String message, TrayIcon trayIcon)
-	{
-		if ("Windows 10".equals(System.getProperty("os.name")))
-		{
-			trayIcon.displayMessage("FAST CHAT", message, MessageType.INFO);
-		}
-	}
-	
-	/**
-	 * Metodo per lanciare il sistema delle notifiche ai clients
-	 * @return
-	 */
-	static TrayIcon Lanciatrayicon()
-	{
-		if (!"Windows 10".equals(System.getProperty("os.name")))
-		{
-			System.out.println("SERVER - Sistema per l'invio dei messaggi al client non supportato dal tuo S.O. " + System.getProperty("os.name"));
-		}
-		else 
-		{
-			SystemTray tray = SystemTray.getSystemTray();
-			Image image = Toolkit.getDefaultToolkit().createImage("./img/immagine.png");
-		    TrayIcon trayIcon = new TrayIcon(image, "FAST CHAT");
-		    trayIcon.setImageAutoSize(true);
-		    trayIcon.setToolTip("FAST CHAT");
-		    try 
-		    {
-				tray.add(trayIcon);
-			} catch (AWTException e) 
-		    {
-				System.out.println("SERVER - Non ti arriveranno alcune notifiche");
-			}
-		    return trayIcon;	
-		}
-		return null;
 	}
 }

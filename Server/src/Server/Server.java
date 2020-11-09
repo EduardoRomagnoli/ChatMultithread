@@ -36,7 +36,7 @@ public class Server
 		while(true) //Loop
 		{
 			Socket client = servsock.accept(); //Accettata la connessione
-			System.out.println("2 - Connessione stabilita con" + client); //Lessaggio
+			System.out.println("2 - Connessione stabilita con" + client); //Messaggio
 			ServerTH ths = new ServerTH(client, clients1); //Creato Nuovo oggetto del Thread (Server)
 			clients1.add(ths); //Aggiunto l'oggetto thread all'ArrayList
 			pool.execute(ths); //Eseguito l'oggetto thread 

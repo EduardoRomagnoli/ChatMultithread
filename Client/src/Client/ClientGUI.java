@@ -1,6 +1,7 @@
 package Client;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -39,6 +40,11 @@ public class ClientGUI extends JFrame
 	public static JLabel comandi;
 	public static JLabel client;
 
+	/**
+	 * Metodo main che inizializza il socket e le variabili e chiama i Thread
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception
 	{
 		Socket s = new Socket ("localhost", 3333);
@@ -48,11 +54,12 @@ public class ClientGUI extends JFrame
 		String nameinput = "";
 		String scomandi = ""; 
 		clients = in.readLine();
+		System.out.println(clients);
 		do 
 		{
 			try 
 			{
-				in.readLine();
+				System.out.println(in.readLine());
 				nameinput = JOptionPane.showInputDialog("Inserisci il nome utente");
 				out.println(nameinput);
 				Thread.sleep(1000);
@@ -61,35 +68,41 @@ public class ClientGUI extends JFrame
 				JOptionPane.showMessageDialog(null, "ERRORE - Messaggio in uscita non valido", null,  JOptionPane.ERROR_MESSAGE);
 			}
 			scomandi = in.readLine();
-			if (!scomandi.equals("⌈Nome utente impostato⌋"))
+			if (!scomandi.equals("11 - Nome utente impostato"))
 			{
 				JOptionPane.showMessageDialog(null, scomandi, "Messaggi in Arrivo",  JOptionPane.ERROR_MESSAGE);
 			}
 		} 
-		while (!(scomandi.equals("⌈Nome utente impostato⌋\"")));
+		while (!(scomandi.equals("11 - Nome utente impostato")));
 		ClientGUI frame = new ClientGUI(out, s);
-		frame.setIconImage(ImageIO.read(new File("./img/immagine.png")));
 		frame.setVisible(true);
 		ClientTHGUI THCL = new ClientTHGUI (s, frame, comandi, client);
 		(new Thread(THCL)).start();
 	}
 
+	/**
+	 * Costruttore della classe che inizializza la grafica della tabella
+	 * @param out
+	 * @param s
+	 */
 	public ClientGUI(PrintWriter out, Socket s) 
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(200, 200, 753, 1000);
+		setBounds(200, 200, 753, 800);
 		Pannello = new JPanel();
 		Pannello.setBorder(new EmptyBorder(10, 10, 10, 10));
 		setContentPane(Pannello);
 		Pannello.setLayout(new BorderLayout(0, 0));
+		Pannello.setBackground(Color.CYAN);
 		JTextField insmesstx;
 		insmesstx = new JTextField();
 		comandi = new JLabel();
 		client = new JLabel(clients);
-		JScrollPane scroll = new JScrollPane(comandi, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		JScrollPane textPane = new JScrollPane(comandi, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		insmesstx.setToolTipText(" - SERVER INFO -\n 1 - usa '@nomeutente' per inviare un messaggio privato\n 2 - usa <<esci>> per disconnettersi\n");
+		textPane.setBackground(Color.RED);
 		Pannello.add(insmesstx, BorderLayout.SOUTH);
-		Pannello.add(scroll);
+		Pannello.add(textPane);
 		Pannello.add(client, BorderLayout.NORTH);
 		insmesstx.addKeyListener(new KeyAdapter() 
 		{
@@ -111,20 +124,27 @@ public class ClientGUI extends JFrame
 		});
 	}
 
-	public void MessaggiOut (JTextField txtrInserireMessaggio, PrintWriter printwriter, Socket socket) throws IOException
+	/**
+	 * MessaggiOut, metodo chd invia i messaggi e nel caso sia presente il messaggio <<esci>> allora esce dal programma
+	 * @param messaggio
+	 * @param in
+	 * @param s
+	 * @throws IOException
+	 */
+	public void MessaggiOut (JTextField messaggio, PrintWriter in, Socket s) throws IOException
 	{
-		String inp = txtrInserireMessaggio.getText();
+		String inp = messaggio.getText();
 		System.out.println(inp);
-		txtrInserireMessaggio.setText("");
+		messaggio.setText("");
 		if(inp.contains("esci"))
 		{
 			System.out.println("Chiusura programma...");
-			socket.close(); 
+			s.close(); 
 			System.exit(0);
 		}
 		else
 		{
-			printwriter.println(inp);
+			in.println(inp);
 		}
 	}
 }

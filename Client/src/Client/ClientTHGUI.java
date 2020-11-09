@@ -14,60 +14,68 @@ import java.awt.TrayIcon.MessageType;
  *
  */
 
-public class ClientTHGUI extends ClientGUI implements Runnable
+public class ClientTHGUI extends ClientTH implements Runnable
 {
 	public ClientGUI pannello;
 	private Socket s;
 	private BufferedReader br;
 	public JLabel msg;
 	public JLabel clients;
-	
+
+	/**
+	 * Costruttore della classe GUI del Thread client
+	 * @param s
+	 * @param pannelloIn
+	 * @param msgIn
+	 * @param clientsIn
+	 * @throws Exception
+	 */
 	public ClientTHGUI(Socket s, ClientGUI pannelloIn, JLabel msgIn, JLabel clientsIn) throws Exception
 	{
-		super(null, s);
-		s = s; 
+		super(s);
+		this.s = s; 
 		this.pannello = pannelloIn;
 		this.clients = clientsIn;
 		this.msg = msgIn;
 		br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 	}
-	
+
+	/**
+	 * Metodo run che lancia i Thread del client
+	 */
 	@Override
 	public void run() 
 	{
-			String testo = "";
-			TrayIcon Tray = ClientTH.Lanciatrayicon();
-			while(true)
+		String testo = "";
+		while(true)
+		{
+			String Inp = ""; 
+			try 
 			{
-				String Inp = ""; 
-				try 
-				{
-					Inp = br.readLine(); 
-				} 
-				catch (Exception e) 
-				{
-					e.printStackTrace();
-				}
-				if(Inp == "") 
-				{
-					break;
-				}
-				if (Inp.startsWith("Online: ") || Inp.equals("0 online"))
-				{
-					ClientGUI.client.setText(Inp);
-				}
-				else if (Inp.equals("ERRORE - Nome utente già esistente"))
-				{
-					JOptionPane.showMessageDialog(null, "ERRORE - Nome utente già esistente", null,  JOptionPane.ERROR_MESSAGE);
-				}
-				else
-				{
-					ClientTH.WindowsNOTF(Inp, Tray);
-					testo = testo + Inp;
-					ClientGUI.comandi.setText("> " + testo);
-				}
-				
+				Inp = br.readLine(); 
+			} 
+			catch (Exception e) 
+			{
+				e.printStackTrace();
 			}
+			if(Inp == "") 
+			{
+				break;
+			}
+			if (Inp.startsWith("SERVER - Online:") || Inp.equals("SERVER - 0 utenti online"))
+			{
+				ClientGUI.client.setText(Inp);
+			}
+			else if (Inp.equals("9 - Nome già presente all'interno della chat"))
+			{
+				JOptionPane.showMessageDialog(null, "ERRORE - Nome utente già esistente", null,  JOptionPane.ERROR_MESSAGE);
+			}
+			else
+			{
+				testo = testo + "<br>" + Inp;
+				ClientGUI.comandi.setText("<html>" + "> " + testo + "</html>");
+			}
+		}
 		try
 		{
 			br.close();
