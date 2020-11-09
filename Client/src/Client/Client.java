@@ -20,11 +20,11 @@ public class Client
 {
 	/**
 	 * Metodo main della classe "Client" si occupa di inizializzare i vari client e di lanciare i thread
-	 * @param argas
+	 * @param args 
 	 * @throws UnknownHostException
 	 * @throws IOException
 	 */
-	public static void main(String[] argas) throws UnknownHostException, IOException 
+	public static void main(String[] args) throws UnknownHostException, IOException 
 	{
 		Socket sock = new Socket("localhost", 3333); //Connessione al Socket
 		ClientTH thcl = new ClientTH(sock); //Creazione Thread client

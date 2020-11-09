@@ -117,8 +117,8 @@ public class ServerTH implements Runnable
 	}
 
 	/**
-	 * Ritorna il valore del nome dell'utente
-	 * @return
+	 * Metodo che ritorna il valore del nome dell'utente
+	 * @return nome utente
 	 */
 	public String getNome()
 	{

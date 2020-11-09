@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
  * Aprire il socket;
  * Aspettare che i client si colleghino al socket;
  * Creare la thread pool e avviarla;
- * Avviare i Thread per poi lanciarli con il codice contenuto nella classe "ServerTH".
+ * Avviare i Thread per poi lanciarli con il codice contenuto nella classe ServerTH.
  * @author Eduardo Romagnoli
  *
  */

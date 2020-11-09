@@ -41,7 +41,7 @@ public class ClientTHGUI extends ClientTH implements Runnable
 	}
 
 	/**
-	 * Metodo run che lancia i Thread del client
+	 * Metodo run che lancia i Thread del client GUI
 	 */
 	@Override
 	public void run() 
@@ -82,7 +82,7 @@ public class ClientTHGUI extends ClientTH implements Runnable
 		}
 		catch (Exception e)
 		{
-			System.out.println("Errore (logout)");
+			System.out.println("Logout");
 		}
 	}	
 }

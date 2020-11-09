@@ -42,7 +42,7 @@ public class ClientGUI extends JFrame
 
 	/**
 	 * Metodo main che inizializza il socket e le variabili e chiama i Thread
-	 * @param args
+	 * @param args 
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception
@@ -82,8 +82,8 @@ public class ClientGUI extends JFrame
 
 	/**
 	 * Costruttore della classe che inizializza la grafica della tabella
-	 * @param out
-	 * @param s
+	 * @param out output 
+	 * @param s socket client
 	 */
 	public ClientGUI(PrintWriter out, Socket s) 
 	{
@@ -125,11 +125,11 @@ public class ClientGUI extends JFrame
 	}
 
 	/**
-	 * MessaggiOut, metodo chd invia i messaggi e nel caso sia presente il messaggio <<esci>> allora esce dal programma
-	 * @param messaggio
-	 * @param in
-	 * @param s
-	 * @throws IOException
+	 * MessaggiOut, metodo chd invia i messaggi e nel caso sia presente il messaggio "esci" allora esce dal programma
+	 * @param messaggio messaggio da inviare
+	 * @param in output verso il server
+	 * @param s socket del client
+	 * @throws IOException 
 	 */
 	public void MessaggiOut (JTextField messaggio, PrintWriter in, Socket s) throws IOException
 	{
